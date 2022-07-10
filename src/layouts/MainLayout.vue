@@ -1,13 +1,15 @@
 <template>
   <q-layout view="lHh LpR fFf">
-    <q-header reveal elevated class="bg-primary text-white">
+    <q-header fixed reveal elevated class="bg-primary text-white">
       <q-toolbar>
         <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
 
         <q-toolbar-title> Digi-Zando </q-toolbar-title>
         <q-space></q-space>
-        <q-btn flat round dense icon="search" class="q-mr-xs" />
-        <q-btn fab round dense icon="shopping_cart" />
+        <q-btn flat outline round dense icon="search" class="q-mr-md" />
+        <q-btn fab round dense size="35px" icon="shopping_cart">
+          <q-badge rounded floating color="positive">2</q-badge>
+        </q-btn>
       </q-toolbar>
     </q-header>
 
@@ -36,17 +38,39 @@
         <q-tabs
           v-model="tab"
           stretch
+          dense
           active-color="light-blue-3"
           switch-indicator
-          active-class="elevation-20 animated rounded-borders shadow-4"
+          active-class="elevation-20 q-badge--rounded rounded-borders shadow-up- shadow-4"
         >
-          <q-tab name="tab1" icon="ion-home" size="28px" to="/" />
+          <q-tab
+            :ripple="{ color: 'orange' }"
+            name="tab1"
+            icon="ion-home"
+            size="28px"
+            to="/"
+          />
 
-          <q-tab name="tab2" icon="ion-heart" size="28px" />
+          <q-tab
+            :ripple="{ color: 'orange' }"
+            name="tab2"
+            icon="ion-heart"
+            size="28px"
+          />
 
-          <q-tab name="tab3" icon="ion-chatbubbles" size="28px" />
+          <q-tab
+            :ripple="{ color: 'orange' }"
+            name="tab3"
+            icon="ion-chatbubbles"
+            size="28px"
+          />
 
-          <q-tab name="tab4" icon="ion-notifications" size="28px" />
+          <q-tab
+            :ripple="{ color: 'orange' }"
+            name="tab4"
+            icon="ion-notifications"
+            size="28px"
+          />
         </q-tabs>
 
         <!--
