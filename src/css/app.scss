@@ -1,0 +1,10 @@
+// app global css in SCSS form
+@font-face {
+  font-family: loew;
+  src: url(../assets/fonts/loew-heavy-webfont.woff);
+}
+
+// declare a class which applies it
+.my-font {
+  font-family: "loew";
+}
