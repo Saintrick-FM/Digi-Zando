@@ -1,29 +1,26 @@
 <template>
   <q-carousel
     v-model="slide"
-    transition-prev="jump-right"
-    transition-next="jump-left"
     swipeable
-    animated
-    control-color="white"
-    prev-icon="arrow_left"
-    next-icon="arrow_right"
-    navigation-icon="radio_button_unchecked"
     navigation
-    padding
-    height="300px"
-    class="bg-purple text-white q-my-xs shadow-4 rounded-borders"
+    navigation-position="left"
+    infinite
+    :autoplay="autoplay"
+    transition-prev="slide-right"
+    transition-next="slide-left"
+    @click="autoplay = false"
+    height="25vh"
+    class="bg-black text-white q-ma-xs q-mb-none shadow-4 rounded-borders"
   >
-    <q-carousel-slide name="style" class="column no-wrap flex-center">
-      <q-icon name="style" size="100px" />
-      <div class="q-mt-md text-center">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit
-      </div>
-    </q-carousel-slide>
-    <q-carousel-slide name="tv" class="column no-wrap flex-center">
-      <q-icon name="live_tv" size="100px" />
-      <div class="q-mt-md text-center">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit
+    <q-carousel-slide
+      v-for="item in list"
+      :key="item.id"
+      :name="item.id"
+      :img-src="item.url"
+    >
+      <div class="absolute-bottom custom-caption">
+        <div class="text-h6 text-amber-10">{{ item.title }}</div>
+        <div class="text-subtitle1 q-mr-xs">{{ item.description }}</div>
       </div>
     </q-carousel-slide>
   </q-carousel>
@@ -31,19 +28,32 @@
 
 <script>
 import { defineComponent, ref } from "vue";
+const data = require("../../assets/data/bannerItems.json");
 
 export default defineComponent({
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Banner",
   setup() {
-    const list = ref([]);
+    const list = ref(data);
 
     return {
-      slide: ref("first"),
+      slide: ref(1),
+      autoplay: ref(true),
       list,
     };
   },
 });
 </script>
 
-<style></style>
+<style lang="sass" scoped>
+
+.q-carousel__navigation--left
+  left: 0px
+
+.custom-caption
+  height:"10px"
+  text-align: right
+  padding: 12px
+  color: white
+  background-color: rgba(0, 0, 0, .3)
+</style>
