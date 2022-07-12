@@ -7,5 +7,5 @@
   "html-css-class-completion.remoteStyleSheets": [
     "https://cdn.jsdelivr.net/npm/quasar@2.7.5/dist/quasar.prod.css"
   ],
-  "eslint.validate": ["javascript", "javascriptreact", "typescript", "vue"]
+  "eslint.validate": ["javascript", "javascriptreact", "typescript"]
 }

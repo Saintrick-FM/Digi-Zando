@@ -3,12 +3,34 @@
   <q-layout view="lHh LpR fFf">
     <q-header fixed reveal elevated class="bg-primary shadow-2 text-white">
       <q-toolbar>
-        <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
+        <q-btn dense flat round push icon="menu" @click="toggleLeftDrawer" />
 
         <q-toolbar-title> Digi-Zando </q-toolbar-title>
         <q-space></q-space>
-        <q-btn flat outline round dense icon="search" class="q-mr-md" />
-        <q-btn fab round dense size="32px" icon="shopping_cart">
+
+        <q-input
+          dark
+          dense
+          label="Recherche"
+          standout
+          v-model="search"
+          input-class="text-left"
+          class="q-mr-md flex-center"
+          width="60px"
+          max-width="100px"
+        >
+          <template v-slot:append>
+            <q-icon v-if="search === ''" name="search" />
+            <q-icon
+              v-else
+              name="clear"
+              class="cursor-pointer"
+              @click="text = ''"
+            />
+          </template>
+        </q-input>
+
+        <q-btn fab push round dense size="32px" icon="shopping_cart">
           <q-badge rounded floating color="positive">2</q-badge>
         </q-btn>
       </q-toolbar>
@@ -34,34 +56,83 @@
     <div class="navigation bg-primary shadow-2 text-white">
       <span class="nav-indicator bg-primary"></span>
       <li class="list">
-        <a href="#" id="accueil" class="">
-          <q-icon size="32px" class="icon" name="ion-home" />
-          <!-- <span class="text">Home</span> -->
+        <a
+          href="#"
+          @click="animateFooter(1)"
+          :class="active_home ? 'nav-item-active' : ''"
+          id="accueil"
+          class=""
+        >
+          <q-icon
+            :size="active_home ? '40px' : '32px'"
+            class="icon"
+            name="ion-home"
+            :background-color="active_home ? 'orange' : 'white'"
+          />
+          <span class="text">Home</span>
         </a>
       </li>
 
       <li class="list">
-        <a href="#" class="" id="notifications">
-          <q-icon size="32px" class="icon" name="ion-notifications" />
-          <!-- <span class="text">Infos</span> -->
+        <a
+          href="#"
+          @click="animateFooter(2)"
+          :class="active_notif ? 'nav-item-active' : ''"
+          id="notifications"
+        >
+          <q-icon
+            :size="active_notif ? '40px' : '32px'"
+            class="icon"
+            name="ion-notifications"
+            :color="active_notif ? 'positive-5' : 'white'"
+          />
+          <span class="text">Infos</span>
+        </a>
+      </li>
+      <li class="list q-fab">
+        <a
+          href="#"
+          @click="animateFooter(3)"
+          :class="active_plus ? 'nav-item-active' : ''"
+          id="plus"
+        >
+          <q-icon
+            :size="active_plus ? '40px' : '32px'"
+            name="ion-add-circle"
+            class="icon"
+          />
+          <span class="text">Plus</span>
         </a>
       </li>
       <li class="list">
-        <a href="#" id="plus" class="nav-item-active">
-          <q-icon name="ion-add-circle" class="icon" />
-          <!-- <span class="text">Plus</span> -->
+        <a
+          href="#"
+          @click="animateFooter(4)"
+          :class="active_chat ? 'nav-item-active' : ''"
+          id="chat"
+          class=""
+        >
+          <q-icon
+            :size="active_chat ? '40px' : '32px'"
+            class="icon"
+            name="ion-chatbubbles"
+          />
+          <span class="text">Chat</span>
         </a>
       </li>
       <li class="list">
-        <a href="#" id="chat" class="">
-          <q-icon size="32px" class="icon" name="ion-chatbubbles" />
-          <!-- <span class="text">Chat</span> -->
-        </a>
-      </li>
-      <li class="list">
-        <a href="#" id="mon_espace" class="">
-          <q-icon size="32px" class="icon" name="ion-heart" />
-          <!-- <span class="text">Profil</span> -->
+        <a
+          :class="active_mon_espace ? 'nav-item-active' : ''"
+          href="#"
+          @click="animateFooter(5)"
+          id="mon_espace"
+        >
+          <q-icon
+            :size="active_mon_espace ? '40px' : '32px'"
+            class="icon"
+            name="ion-contact"
+          />
+          <span class="text">Profil</span>
         </a>
       </li>
     </div>
@@ -69,7 +140,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, onMounted } from "vue";
 import EssentialLink from "components/EssentialLink.vue";
 
 const linksList = [
@@ -123,60 +194,126 @@ export default defineComponent({
   components: {
     EssentialLink,
   },
-  click() {
-    console.log("a =>" + this);
-    const activeItem = document.querySelector(".menu-item.active");
-    activeItem.classList.remove("active");
-    this.classList.add("active");
-  },
 
-  mounted() {
-    const menuItems = document.querySelectorAll(".list");
-    menuItems.forEach((a, index) => {
-      a.addEventListener(click, click);
-    });
-  } /*
-  mounted() {
-    document.getElementById("plus").className = "nav-item-active";
-  },*/,
   setup() {
     const leftDrawerOpen = ref(false);
-    /*
+    const active_home = ref(false);
+    const active_notif = ref(false);
+    const active_plus = ref(true);
+    const active_mon_espace = ref(false);
+    const active_chat = ref(false);
+    const halfScreen = ref();
+    const halfnavIndicator = ref();
+    const quartScreen = ref();
+
+    onMounted(() => {
+      halfScreen.value = window.innerWidth / 2;
+      halfnavIndicator.value =
+        document.querySelector(".nav-indicator").clientWidth / 2;
+      quartScreen.value = halfScreen.value / 2;
+
+      let total = halfScreen.value - halfnavIndicator.value;
+
+      document.querySelector(".nav-indicator").style.left = total
+        .toString()
+        .concat("px");
+      //set top of nav-indicator
+      if (window.innerWidth <= 300) {
+        document.querySelector(".nav-indicator").style.top = "-22px";
+      } else if (300 < window.innerWidth < 360) {
+        document.querySelector(".nav-indicator").style.top = "-25px";
+      } else {
+        document.querySelector(".nav-indicator").style.top = "-33px";
+      }
+    });
+
     function animateFooter(indexClique) {
       let activeNav = document.getElementsByClassName("nav-item-active")[0];
       console.log("actuellement actif " + activeNav);
 
-      activeNav.classList.remove("nav-item-active");
-
       console.log("juste après remove  " + activeNav);
+
       if (indexClique == 1) {
-        document.getElementById("accueil").className = "nav-item-active";
+        active_home.value = true;
+        active_plus.value = false;
+        active_notif.value = false;
+        active_chat.value = false;
+        active_mon_espace.value = false;
+
+        document.querySelector(".nav-indicator").style.left = "10px";
       }
       if (indexClique == 2) {
         console.log("indexClique==2");
-        document.getElementById("notifications").className = "nav-item-active";
+
+        active_notif.value = true;
+        active_plus.value = false;
+        active_chat.value = false;
+        active_mon_espace.value = false;
+        active_home.value = false;
+
+        let total2 = quartScreen.value - halfnavIndicator.value + 16.5;
+        document.querySelector(".nav-indicator").style.left = total2
+          .toString()
+          .concat("px");
       }
       if (indexClique == 3) {
         console.log("indexClique==3");
+        active_plus.value = true;
+        active_notif.value = false;
+        active_chat.value = false;
+        active_mon_espace.value = false;
+        active_home.value = false;
 
-        document.getElementById("plus").className = "nav-item-active";
+        let total3 = halfScreen.value - halfnavIndicator.value;
+
+        document.querySelector(".nav-indicator").style.left = total3
+          .toString()
+          .concat("px");
       }
       if (indexClique == 4) {
         console.log("indexClique==4");
+        active_chat.value = true;
+        active_plus.value = false;
+        active_notif.value = false;
+        active_mon_espace.value = false;
+        active_home.value = false;
 
-        document.getElementById("chat").className = "nav-item-active";
+        let total4 =
+          window.innerWidth - quartScreen.value - halfnavIndicator.value - 16;
+        console.log(
+          "total 4 " + total4 + " window.innerWidth " + window.innerWidth
+        );
+        document.querySelector(".nav-indicator").style.left = total4
+          .toString()
+          .concat("px");
       }
       if (indexClique == 5) {
         console.log("indexClique==5");
 
-        document.getElementById("mon_espace").className = "nav-item-active";
+        active_mon_espace.value = true;
+        active_plus.value = false;
+        active_notif.value = false;
+        active_chat.value = false;
+        active_home.value = false;
+
+        let total5 = window.innerWidth - 9.5 - halfnavIndicator.value * 2;
+        console.log("total5 " + total5);
+        document.querySelector(".nav-indicator").style.left = total5
+          .toString()
+          .concat("px");
       }
     }
-*/
+
     return {
       tab: ref("tab1"),
+      search: ref(""),
       essentialLinks: linksList,
-      //    animateFooter,
+      active_mon_espace,
+      active_plus,
+      active_notif,
+      active_chat,
+      active_home,
+      animateFooter,
       leftDrawerOpen,
       toggleLeftDrawer() {
         leftDrawerOpen.value = !leftDrawerOpen.value;
@@ -186,7 +323,7 @@ export default defineComponent({
 });
 </script>
 
-<style lang="css" scoped>
+<style lang="scss" scoped>
 :root {
   --bg-body: #dff9fb;
   --bg-nav: #220455;
@@ -206,7 +343,7 @@ export default defineComponent({
   list-style-type: none;
   border-radius: 8px;
   background-color: var(--color-nav);
-  padding-inline: 10px;
+  padding-inline: 14px;
   z-index: 999;
 }
 
@@ -219,37 +356,36 @@ export default defineComponent({
   font-size: 30px;
   position: relative;
   z-index: 1;
+  border-radius: 50%;
+  border: 2px solid var(--bg-body);
+
+  transition: all 0.5s;
 }
 .list a.nav-item-active {
-  border: 2px solid var(--bg-body);
-  border-radius: 50%;
-  color: #dff9fb;
-  transform: translateY(-30%);
-  font-size: 44px;
-  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform: translate3d(0, -20px, 0);
 }
+
 .list a .text {
   display: none;
   font-size: 16px;
 }
+.list a.nav-item-active .icon {
+  color: $light-green-13;
+}
 .list a.nav-item-active .text {
   display: block;
   font-weight: 800;
-}
-
-.list a:hover {
-  transform: translateY(-32px);
-  color: #dff9fb;
+  color: $light-green-13;
 }
 
 .navigation .nav-indicator {
-  width: 75px;
-  height: 80px;
+  min-width: 50px;
+  /* width: 75px;
+  height: 80px; */
+  min-height: 60px;
   border-radius: 50%;
   background-color: primary;
   position: absolute;
-  top: -33px;
-  left: 41.2%;
   transition: left 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 </style>
