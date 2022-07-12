@@ -65,11 +65,15 @@
         >
           <q-icon
             :size="active_home ? '40px' : '32px'"
-            class="icon"
+            :class="
+              active_home
+                ? 'shadow-10 justify-center items-center icon'
+                : 'icon'
+            "
             name="ion-home"
             :background-color="active_home ? 'orange' : 'white'"
           />
-          <span class="text">Home</span>
+          <span class="text q-mt-xs">Home</span>
         </a>
       </li>
 
@@ -82,26 +86,36 @@
         >
           <q-icon
             :size="active_notif ? '40px' : '32px'"
-            class="icon"
+            :class="
+              active_notif
+                ? 'shadow-10 justify-center items-center icon'
+                : 'icon'
+            "
             name="ion-notifications"
             :color="active_notif ? 'positive-5' : 'white'"
           />
-          <span class="text">Infos</span>
+          <span class="text q-mt-xs">Infos</span>
         </a>
       </li>
       <li class="list q-fab">
         <a
           href="#"
           @click="animateFooter(3)"
-          :class="active_plus ? 'nav-item-active' : ''"
+          :class="
+            active_plus ? 'nav-item-active items-center justify-center' : ''
+          "
           id="plus"
         >
           <q-icon
             :size="active_plus ? '40px' : '32px'"
+            :class="
+              active_plus
+                ? 'shadow-10 justify-center items-center icon'
+                : 'icon'
+            "
             name="ion-add-circle"
-            class="icon"
           />
-          <span class="text">Plus</span>
+          <span class="text q-mt-xs">Plus</span>
         </a>
       </li>
       <li class="list">
@@ -114,10 +128,14 @@
         >
           <q-icon
             :size="active_chat ? '40px' : '32px'"
-            class="icon"
+            :class="
+              active_chat
+                ? 'shadow-10 justify-center items-center icon'
+                : 'icon'
+            "
             name="ion-chatbubbles"
           />
-          <span class="text">Chat</span>
+          <span class="text q-mt-xs">Chat</span>
         </a>
       </li>
       <li class="list">
@@ -129,10 +147,15 @@
         >
           <q-icon
             :size="active_mon_espace ? '40px' : '32px'"
+            :class="
+              active_mon_espace
+                ? 'shadow-10 justify-center items-center icon'
+                : 'icon'
+            "
             class="icon"
             name="ion-contact"
           />
-          <span class="text">Profil</span>
+          <span class="text q-mt-xs">Profil</span>
         </a>
       </li>
     </div>
@@ -219,11 +242,11 @@ export default defineComponent({
         .concat("px");
       //set top of nav-indicator
       if (window.innerWidth <= 300) {
-        document.querySelector(".nav-indicator").style.top = "-22px";
+        document.querySelector(".nav-indicator").style.top = "-23px";
       } else if (300 < window.innerWidth < 360) {
         document.querySelector(".nav-indicator").style.top = "-25px";
       } else {
-        document.querySelector(".nav-indicator").style.top = "-33px";
+        document.querySelector(".nav-indicator").style.top = "-30px";
       }
     });
 
@@ -362,7 +385,7 @@ export default defineComponent({
   transition: all 0.5s;
 }
 .list a.nav-item-active {
-  transform: translate3d(0, -20px, 0);
+  transform: translate3d(0, -14px, 0);
 }
 
 .list a .text {
@@ -371,6 +394,7 @@ export default defineComponent({
 }
 .list a.nav-item-active .icon {
   color: $light-green-13;
+  border-radius: 50%;
 }
 .list a.nav-item-active .text {
   display: block;
@@ -383,7 +407,7 @@ export default defineComponent({
   /* width: 75px;
   height: 80px; */
   min-height: 60px;
-  border-radius: 50%;
+  border-radius: 45%;
   background-color: primary;
   position: absolute;
   transition: left 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
