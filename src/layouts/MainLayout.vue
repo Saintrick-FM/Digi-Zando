@@ -5,33 +5,60 @@
       <q-toolbar>
         <q-btn dense flat round push icon="menu" @click="toggleLeftDrawer" />
 
-        <q-toolbar-title> Digi-Zando </q-toolbar-title>
-        <q-space></q-space>
-
-        <q-input
-          dark
-          dense
-          label="Recherche"
-          standout
-          v-model="search"
-          input-class="text-left"
-          class="q-mr-md flex-center"
-          width="60px"
-          max-width="100px"
+        <!-- style="text-overflow: unset, " -->
+        <q-toolbar-title
+          class="mainTitle"
+          v-if="!inputSearch"
+          style="transition: 0.5s"
+          >Digi Zando</q-toolbar-title
         >
-          <template v-slot:append>
-            <q-icon v-if="search === ''" name="search" />
-            <q-icon
-              v-else
-              name="clear"
-              class="cursor-pointer"
-              @click="text = ''"
-            />
-          </template>
-        </q-input>
+
+        <!-- icon="ios-search" -->
+        <q-toolbar class="text-white searchContainer">
+          <q-btn
+            round
+            flat
+            class="flex-center"
+            style="margin-right: 2px"
+            dense
+            icon="search"
+            @click="shawInputSearch"
+          />
+
+          <!-- Must add bottom-slots propertie to enable showing messages errors
+            aria-placeholder="entrer le produit à rechercher"-->
+          <q-input
+            input-class="text-left"
+            dark
+            dense
+            standout
+            label="Recherche"
+            v-model="search"
+            v-if="inputSearch"
+            style="transition: 0.5s"
+          >
+            <template v-slot:append>
+              <q-icon
+                v-if="text === ''"
+                name="ios-create"
+                @click="search = ''"
+                class="cursor-pointer"
+              />
+              <q-icon
+                v-else
+                name="clear"
+                @click="search = ''"
+                class="cursor-pointer"
+              />
+            </template>
+            <!-- <template v-slot:hint>
+              Produit introuvable
+            </template> -->
+          </q-input>
+        </q-toolbar>
 
         <q-btn fab push round dense size="32px" icon="shopping_cart">
-          <q-badge rounded floating color="positive">2</q-badge>
+          <q-badge rounded floating color="positive">4</q-badge>
         </q-btn>
       </q-toolbar>
     </q-header>
@@ -228,9 +255,19 @@ export default defineComponent({
     const halfScreen = ref();
     const halfnavIndicator = ref();
     const quartScreen = ref();
+    const inputSearch = ref(false);
 
+    function shawInputSearch() {
+      document.querySelector(".searchContainer").classList.toggle("active");
+      inputSearch.value = !inputSearch.value;
+    }
     onMounted(() => {
-      halfScreen.value = window.innerWidth / 2;
+      let windowWidth = window.innerWidth;
+      //set main title to 19px for small devices
+      if (windowWidth < 280) {
+        document.querySelector(".mainTitle").style.fontSize = "19px";
+      }
+      halfScreen.value = windowWidth / 2;
       halfnavIndicator.value =
         document.querySelector(".nav-indicator").clientWidth / 2;
       quartScreen.value = halfScreen.value / 2;
@@ -241,7 +278,7 @@ export default defineComponent({
         .toString()
         .concat("px");
       //set top of nav-indicator
-      if (window.innerWidth <= 300) {
+      if (windowWidth <= 300) {
         document.querySelector(".nav-indicator").style.top = "-23px";
       } else if (300 < window.innerWidth < 360) {
         document.querySelector(".nav-indicator").style.top = "-25px";
@@ -330,12 +367,14 @@ export default defineComponent({
     return {
       tab: ref("tab1"),
       search: ref(""),
+      inputSearch,
       essentialLinks: linksList,
       active_mon_espace,
       active_plus,
       active_notif,
       active_chat,
       active_home,
+      shawInputSearch,
       animateFooter,
       leftDrawerOpen,
       toggleLeftDrawer() {
@@ -352,6 +391,18 @@ export default defineComponent({
   --bg-nav: #220455;
   --color-nav: #644c89;
   --color-nav-hover: #dff9fb;
+}
+.searchContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60px;
+  transition: width 0.5s;
+  border-radius: 60px;
+}
+.searchContainer.active {
+  width: 300px;
+  transition: width 0.5s;
 }
 .navigation {
   position: fixed;
