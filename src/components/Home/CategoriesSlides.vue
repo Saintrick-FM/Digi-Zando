@@ -1,5 +1,9 @@
 <template>
-  <div style="width: 100%" class="q-mx-none q-mt-sm bg-transparent shadow-10">
+  <div
+    style="width: 100%"
+    id="categories"
+    class="q-mx-none q-mt-sm bg-primary shadow-10"
+  >
     <div class="q-gutter-xs q-card--bordered rounded-borders">
       <q-tabs
         v-model="tab"
@@ -40,7 +44,7 @@
 </template>
 
 <script>
-import { reactive, computed, ref } from "vue";
+import { reactive, computed, ref, onMounted } from "vue";
 
 export default {
   setup() {
@@ -53,6 +57,14 @@ export default {
       { id: 4, title: "tee-shirt", selected: false },
     ]);
 
+    onMounted(() => {
+      //Pass the height of the topNavBar to child components to handle onscroll banner sticky
+      localStorage.setItem(
+        "categories_top",
+        document.querySelector("#categories").offsetTop
+      );
+      console.log("categories_height already set");
+    });
     return {
       cookies,
       nomCategorie: "Chaussures",
@@ -67,3 +79,10 @@ export default {
   },
 };
 </script>
+<style scoped>
+#categories.sticky {
+  position: fixed;
+  top: 40.2px;
+  left: 0;
+}
+</style>

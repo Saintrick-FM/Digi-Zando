@@ -11,6 +11,7 @@
     @click="autoplay = false"
     height="25vh"
     class="bg-black text-white q-ma-xs q-mb-none shadow-4 rounded-borders"
+    id="banner"
   >
     <q-carousel-slide
       v-for="item in list"
@@ -27,7 +28,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, onMounted } from "vue";
 const data = require("../../assets/data/bannerItems.json");
 
 export default defineComponent({
@@ -35,6 +36,14 @@ export default defineComponent({
   name: "Banner",
   setup() {
     const list = ref(data);
+
+    onMounted(() => {
+      localStorage.setItem(
+        "banner_height",
+        document.querySelector("#banner").clientHeight
+      );
+      console.log("banner_height already set");
+    });
 
     return {
       slide: ref(1),
@@ -45,15 +54,16 @@ export default defineComponent({
 });
 </script>
 
-<style lang="sass" scoped>
+<style lang="css" scoped>
+.q-carousel__navigation--left {
+  left: "0px";
+}
 
-.q-carousel__navigation--left
-  left: 0px
-
-.custom-caption
-  height:"10px"
-  text-align: right
-  padding: 12px
-  color: white
-  background-color: rgba(0, 0, 0, .3)
+.custom-caption {
+  height: 10px;
+  text-align: right;
+  padding: 12px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.3);
+}
 </style>

@@ -1,6 +1,9 @@
 <template>
   <banner />
   <categories-slides />
+  <div v-for="(item, index) in 30" :key="index" class="caption">
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+  </div>
 </template>
 
 <script>

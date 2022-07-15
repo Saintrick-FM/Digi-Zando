@@ -1,7 +1,7 @@
 /* eslint-disable */
 <template>
   <q-layout view="lHh LpR fFf">
-    <q-header fixed reveal elevated class="bg-primary shadow-2 text-white">
+    <q-header fixed elevated class="bg-primary shadow-2 text-white">
       <q-toolbar>
         <q-btn dense flat round push icon="menu" @click="toggleLeftDrawer" />
 
@@ -12,8 +12,8 @@
           style="transition: 0.5s"
           >Digi Zando</q-toolbar-title
         >
+        <v-space v-if="halfScreen * 2 > 275"></v-space>
 
-        <!-- icon="ios-search" -->
         <q-toolbar class="text-white searchContainer">
           <q-btn
             round
@@ -238,6 +238,22 @@ const linksList = [
   },
 ];
 
+window.onscroll = function () {
+  let bannerHeight = parseInt(localStorage.getItem("banner_height"));
+  let categoriesTop = parseInt(localStorage.getItem("categories_top"));
+  console.log("window.pageYOffset => " + window.pageYOffset);
+  if (window.pageYOffset >= categoriesTop) {
+    console.log(
+      "categoriesTop from localStorage =>" +
+        categoriesTop +
+        " bannerHeight => " +
+        bannerHeight
+    );
+    document.querySelector("#categories").classList.add("sticky");
+  } else {
+    document.querySelector("#categories").classList.remove("sticky");
+  }
+};
 export default defineComponent({
   name: "MainLayout",
 
@@ -261,12 +277,14 @@ export default defineComponent({
       document.querySelector(".searchContainer").classList.toggle("active");
       inputSearch.value = !inputSearch.value;
     }
+
     onMounted(() => {
       let windowWidth = window.innerWidth;
       //set main title to 19px for small devices
       if (windowWidth < 280) {
         document.querySelector(".mainTitle").style.fontSize = "19px";
       }
+
       halfScreen.value = windowWidth / 2;
       halfnavIndicator.value =
         document.querySelector(".nav-indicator").clientWidth / 2;
@@ -374,6 +392,7 @@ export default defineComponent({
       active_notif,
       active_chat,
       active_home,
+      halfScreen,
       shawInputSearch,
       animateFooter,
       leftDrawerOpen,
@@ -407,7 +426,7 @@ export default defineComponent({
 .navigation {
   position: fixed;
   bottom: 0;
-  height: 65px;
+  height: 55px;
   width: 100%;
   display: flex;
   flex-direction: row;
