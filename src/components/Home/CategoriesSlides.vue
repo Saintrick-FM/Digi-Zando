@@ -1,46 +1,41 @@
 <template>
-  <div
-    style="width: 100%"
+  <q-tabs
+    v-model="tab"
+    flat
+    sweepable
+    inline-label
+    active-bg-color="light-green-7"
+    style="width: 100%; padding: 0 5px; height: 60px; justify-self: center"
     id="categories"
-    class="q-mx-none q-mt-sm bg-primary shadow-10"
+    class="q-mx-none text-white q-mt-sm flex-center bg-primary-2 shadow-10"
   >
-    <div class="q-gutter-xs q-card--bordered rounded-borders">
-      <q-tabs
-        v-model="tab"
-        flat
-        sweepable
-        inline-label
-        active-bg-color="light-green-7"
-        class="text-white"
+    <q-tab
+      v-for="item in categoriesItems"
+      :key="item.id"
+      :name="item.title"
+      @click="item.selected == true"
+      class="q-pa-none"
+      style="border-radius: 120px"
+    >
+      <q-chip
+        v-model:selected="categoriesItems.chaussures"
+        v-model="cookies"
+        color="black"
+        text-color="white"
+        width="50px"
       >
-        <q-tab
-          v-for="item in categoriesItems"
-          :key="item.id"
-          :name="item.title"
-          @click="item.selected == true"
-          class="q-pa-none"
-          style="border-radius: 120px"
-        >
-          <q-chip
-            v-model:selected="categoriesItems.chaussures"
-            v-model="cookies"
-            color="black"
-            text-color="white"
-            width="50px"
-          >
-            <q-avatar>
-              <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
-            </q-avatar>
-            <div class="ellipsis">
-              {{ item.title }}
-            </div>
-          </q-chip>
-        </q-tab>
-      </q-tabs>
-    </div>
-    <!--
+        <q-avatar>
+          <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
+        </q-avatar>
+        <div class="ellipsis">
+          {{ item.title }}
+        </div>
+      </q-chip>
+    </q-tab>
+  </q-tabs>
+  <!-- </div>
+
     <div class="q-mt-sm">Your pick: {{ selection }}</div> -->
-  </div>
 </template>
 
 <script>
@@ -79,10 +74,11 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
 #categories.sticky {
   position: fixed;
   top: 40.2px;
   left: 0;
+  background-color: $primary;
 }
 </style>

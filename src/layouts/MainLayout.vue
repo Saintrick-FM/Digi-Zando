@@ -6,10 +6,7 @@
         <q-btn dense flat round push icon="menu" @click="toggleLeftDrawer" />
 
         <!-- style="text-overflow: unset, " -->
-        <q-toolbar-title
-          class="mainTitle"
-          v-if="!inputSearch"
-          style="transition: 0.5s"
+        <q-toolbar-title class="mainTitle" v-if="!inputSearch"
           >Digi Zando</q-toolbar-title
         >
         <v-space v-if="halfScreen * 2 > 275"></v-space>
@@ -76,7 +73,7 @@
       </q-list>
     </q-drawer>
 
-    <q-page-container>
+    <q-page-container id="page_container">
       <router-view />
     </q-page-container>
 
@@ -191,7 +188,10 @@
 
 <script>
 import { defineComponent, ref, onMounted } from "vue";
+import {windowSizeStore} from "../stores/window-size"
 import EssentialLink from "components/EssentialLink.vue";
+
+const window = windowSizeStore();
 
 const linksList = [
   {
@@ -275,17 +275,24 @@ export default defineComponent({
 
     function shawInputSearch() {
       document.querySelector(".searchContainer").classList.toggle("active");
-      inputSearch.value = !inputSearch.value;
+      if (inputSearch.value) {
+        setTimeout(() => {
+          inputSearch.value = !inputSearch.value;
+        }, 200);
+      } else {
+        inputSearch.value = !inputSearch.value;
+      }
     }
 
     onMounted(() => {
-      let windowWidth = window.innerWidth;
+      window.initializeSIzes({height: window.innerHeight, width: window.innerWidth})
       //set main title to 19px for small devices
-      if (windowWidth < 280) {
+      console.log("window.width"+ window.width)
+      if (window.width < 280) {
         document.querySelector(".mainTitle").style.fontSize = "19px";
       }
 
-      halfScreen.value = windowWidth / 2;
+      halfScreen.value = window.width / 2;
       halfnavIndicator.value =
         document.querySelector(".nav-indicator").clientWidth / 2;
       quartScreen.value = halfScreen.value / 2;
@@ -481,5 +488,10 @@ export default defineComponent({
   background-color: primary;
   position: absolute;
   transition: left 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+#page_container {
+  background-color: rgba(255, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
 }
 </style>
