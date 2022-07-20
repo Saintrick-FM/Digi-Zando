@@ -39,7 +39,7 @@
             :text-color="liked ? 'green' : 'white'"
             icon="favorite"
             class="rounded-borders; shadow-10; elevation-4"
-            @click="onClickLike()"
+            @click="onClickLike"
           />
           <div
             style="height: 25px; width: 100%; padding: 0 0 7px 0"
