@@ -1,8 +1,8 @@
 import { defineStore } from "pinia";
 
-export const windowSizeStore = defineStore("windowSize", {
+export const productsStore = defineStore("productsStore", {
   state: () => ({
-    categoriesTop: 0,
+    products: [],
   }),
   getters: {
     categoriesTop_toString: (state) =>

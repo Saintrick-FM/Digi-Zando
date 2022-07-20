@@ -40,6 +40,9 @@
 
 <script>
 import { reactive, computed, ref, onMounted } from "vue";
+import { windowSizeStore } from "../../stores/window-size";
+
+const windowSize = windowSizeStore();
 
 export default {
   setup() {
@@ -53,13 +56,21 @@ export default {
     ]);
 
     onMounted(() => {
-      //Pass the height of the topNavBar to child components to handle onscroll banner sticky
+      /*Pass the height of the topNavBar to child components to handle onscroll banner sticky
       localStorage.setItem(
         "categories_top",
         document.querySelector("#categories").offsetTop
+      );*/
+
+      //let top = document.querySelector("#categories");
+      windowSize.initializeSIzes({
+        categoriesTop: document.querySelector("#categories").offsetTop,
+      });
+      console.log(
+        "categories.offsetTop" + document.querySelector("#categories").offsetTop
       );
-      console.log("categories_height already set");
     });
+
     return {
       cookies,
       nomCategorie: "Chaussures",

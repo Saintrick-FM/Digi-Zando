@@ -38,11 +38,7 @@ export default defineComponent({
     const list = ref(data);
 
     onMounted(() => {
-      localStorage.setItem(
-        "banner_height",
-        document.querySelector("#banner").clientHeight
-      );
-      console.log("banner_height already set");
+      console.log("banner mounted in banner component");
     });
 
     return {
@@ -60,9 +56,10 @@ export default defineComponent({
 }
 
 .custom-caption {
-  height: 10px;
+  height: 45%;
+  width: 100%;
   text-align: right;
-  padding: 12px;
+  padding: 5px;
   color: white;
   background-color: rgba(0, 0, 0, 0.3);
 }

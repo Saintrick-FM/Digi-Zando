@@ -3,39 +3,114 @@
     style="padding-top: 40px"
     class="row q-gutter-y-lg q-px-xs doc-container justify-evenly items-start"
   >
-    <div
-      :style="index % 2 == 0 ? 'margin-top:0 ;' : 'margin-top:22px'"
+    <q-card
+      :style="
+        windowWidth > 280 && index % 2 == 0
+          ? 'margin-top:0 ;'
+          : 'margin-top:22px'
+      "
       v-for="(item, index) in 30"
       :key="index"
       :class="
         windowWidth > 280
           ? 'col-5 shadow-2 rounded-borders'
-          : 'col shadow-2 rounded-borders'
+          : 'col-11 shadow-2 rounded-borders'
       "
     >
-      Produit
-    </div>
+      <q-card-section
+        style="height: 60%"
+        class="bg-primary no-padding text-white"
+      >
+        <q-img
+          style="height: 100%"
+          src="https://cdn.quasar.dev/img/parallax2.jpg"
+        >
+          <q-btn
+            dense
+            round
+            push
+            style="
+              position: absolute;
+              right: 0px;
+              top: 0.7px;
+              border-top-right-radius: 0px;
+            "
+            :color="liked ? 'primary' : 'transparent'"
+            :text-color="liked ? 'green' : 'white'"
+            icon="favorite"
+            class="rounded-borders; shadow-10; elevation-4"
+            @click="onClickLike()"
+          />
+          <div
+            style="height: 25px; width: 100%; padding: 0 0 7px 0"
+            class="absolute-bottom flex items-center text-subtitle2 text-left"
+          >
+            <q-chip
+              style="padding: 0 0 0 2px"
+              outline
+              dense
+              square
+              color="primary"
+              text-color="white"
+              icon="event"
+            >
+              New
+            </q-chip>
+          </div>
+        </q-img>
+      </q-card-section>
+
+      <q-separator />
+
+      <q-card-section style="height: 40%" align="space-between">
+        <q-btn
+          fab
+          push
+          round
+          dense
+          elevation-4
+          color="primary"
+          icon="shopping_cart"
+          class="absolute"
+          style="
+            bottom: 0px;
+            right: 0px;
+            padding: 8.2px;
+            border-bottom-right-radius: 0;
+          "
+        />
+      </q-card-section>
+    </q-card>
   </div>
 </template>
 
 <script>
-import { reactive, toRefs, ref, defineComponent } from "vue";
+import { ref, defineComponent } from "vue";
+import { windowSizeStore } from "../../stores/window-size";
+import { clients } from "../../stores/clients";
+
+//const clients = clients();
+
+const windowSize = windowSizeStore();
+console.log("windowSize.width in Products => " + windowSize.categoriesTop);
 
 export default defineComponent({
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Products",
 
   setup() {
-    const state = reactive({
+    const liked = ref(false);
+    /*const state = reactive({
       count: 0,
     });
     onMounted(() => {
-      windowWidth.value = window.innerWidth;
-    }),
-      function onClickLike() {
-        console.log("like cliqué " + liked);
-        setLiked(!liked);
-      };
+      ;
+    }),*/
+    function onClickLike() {
+      console.log("like cliqué ");
+      liked.value = !liked.value;
+      // clients.allClients.find(client=>client.)
+    }
 
     function addCart(element) {
       console.log("element a ajouté " + JSON.stringify(element));
@@ -64,9 +139,11 @@ export default defineComponent({
     }
 
     return {
-      ...toRefs(state),
+      //...toRefs(state),
       stars: ref(4),
-      windowWidth: ref(0),
+      liked,
+      onClickLike,
+      windowWidth: ref(window.innerWidth),
     };
   },
 });

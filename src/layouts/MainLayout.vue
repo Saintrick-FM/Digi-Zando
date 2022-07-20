@@ -77,7 +77,7 @@
       <router-view />
     </q-page-container>
 
-    <div class="navigation bg-primary shadow-2 text-white">
+    <q-footer fixed class="navigation bg-primary shadow-2 text-white">
       <span class="nav-indicator bg-primary"></span>
       <li class="list">
         <a
@@ -182,16 +182,16 @@
           <span class="text q-mt-xs">Profil</span>
         </a>
       </li>
-    </div>
+    </q-footer>
   </q-layout>
 </template>
 
 <script>
 import { defineComponent, ref, onMounted } from "vue";
-import {windowSizeStore} from "../stores/window-size"
 import EssentialLink from "components/EssentialLink.vue";
+import { windowSizeStore } from "../stores/window-size";
 
-const window = windowSizeStore();
+const windowSize = windowSizeStore();
 
 const linksList = [
   {
@@ -239,16 +239,17 @@ const linksList = [
 ];
 
 window.onscroll = function () {
-  let bannerHeight = parseInt(localStorage.getItem("banner_height"));
-  let categoriesTop = parseInt(localStorage.getItem("categories_top"));
-  console.log("window.pageYOffset => " + window.pageYOffset);
-  if (window.pageYOffset >= categoriesTop) {
-    console.log(
-      "categoriesTop from localStorage =>" +
-        categoriesTop +
-        " bannerHeight => " +
-        bannerHeight
-    );
+  // let bannerHeight = parseInt(localStorage.getItem("banner_height"));
+  // let categoriesTop = parseInt(localStorage.getItem("categories_top"));
+
+  console.log(
+    "window.pageYOffset on scroll => " +
+      window.pageYOffset +
+      "ctegoriesTop " +
+      windowSize.categoriesTop.categoriesTop
+  );
+
+  if (window.pageYOffset >= windowSize.categoriesTop.categoriesTop) {
     document.querySelector("#categories").classList.add("sticky");
   } else {
     document.querySelector("#categories").classList.remove("sticky");
@@ -285,14 +286,18 @@ export default defineComponent({
     }
 
     onMounted(() => {
-      window.initializeSIzes({height: window.innerHeight, width: window.innerWidth})
+      console.log(
+        "Main layount mounted. Value of categoriesTop = " +
+          windowSize.categoriesTop
+      );
       //set main title to 19px for small devices
-      console.log("window.width"+ window.width)
-      if (window.width < 280) {
+
+      window.innerHeight;
+      if (window.innerWidth < 280) {
         document.querySelector(".mainTitle").style.fontSize = "19px";
       }
 
-      halfScreen.value = window.width / 2;
+      halfScreen.value = window.innerWidth / 2;
       halfnavIndicator.value =
         document.querySelector(".nav-indicator").clientWidth / 2;
       quartScreen.value = halfScreen.value / 2;
@@ -303,7 +308,7 @@ export default defineComponent({
         .toString()
         .concat("px");
       //set top of nav-indicator
-      if (windowWidth <= 300) {
+      if (window.innerWidth <= 300) {
         document.querySelector(".nav-indicator").style.top = "-23px";
       } else if (300 < window.innerWidth < 360) {
         document.querySelector(".nav-indicator").style.top = "-25px";
