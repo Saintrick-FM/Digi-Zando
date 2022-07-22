@@ -3,27 +3,30 @@
     style="padding-top: 40px"
     class="row q-gutter-y-lg q-px-xs doc-container justify-evenly items-start"
   >
-    <q-card
+    <q-intersection
+      transition="scale"
+      transition-duration="100"
+      v-for="(product, index) in products"
+      :key="product.key"
       :style="
         windowWidth > 280 && index % 2 == 0
-          ? 'margin-top:0 ;'
-          : 'margin-top:22px'
+          ? 'margin-top:0; height:100%'
+          : 'margin-top:22px; height:100%'
       "
-      v-for="(item, index) in 30"
-      :key="index"
       :class="
         windowWidth > 280
           ? 'col-5 shadow-2 rounded-borders'
           : 'col-11 shadow-2 rounded-borders'
       "
     >
-      <q-card-section
+      <product-card :image="product.image" :statut="product.statut" />
+      <!-- <q-card-section
         style="height: 60%"
         class="bg-primary no-padding text-white"
       >
         <q-img
           style="height: 100%"
-          src="https://cdn.quasar.dev/img/parallax2.jpg"
+          :src="product.image"
         >
           <q-btn
             dense
@@ -54,7 +57,7 @@
               text-color="white"
               icon="event"
             >
-              New
+              {{product.statut}}
             </q-chip>
           </div>
         </q-img>
@@ -79,16 +82,37 @@
             border-bottom-right-radius: 0;
           "
         />
-      </q-card-section>
-    </q-card>
+      </q-card-section> -->
+    </q-intersection>
+
+    <q-tabs
+      v-model="tab"
+      flat
+      sweepable
+      active-bg-color="light-green-7"
+      style="width: 100%; padding: 0 5px; height: 60px; justify-self: center"
+      class="q-mx-none text-white q-mt-sm flex-center bg-transparent shadow-10"
+    >
+      <q-tab
+        v-for="item in products"
+        :key="item.id"
+        :name="item.name"
+        @click="clickProduct(item)"
+        class="q-pa-none"
+        style="border-radius: 120px"
+      >
+        <product-card :image="item.image" :statut="item.statut" />
+      </q-tab>
+    </q-tabs>
   </div>
 </template>
 
 <script>
 import { ref, defineComponent } from "vue";
 import { windowSizeStore } from "../../stores/window-size";
+import ProductCard from "../../components/Home/ProductCard.vue";
 import { clients } from "../../stores/clients";
-
+const data = require("../../assets/data/products.json");
 //const clients = clients();
 
 const windowSize = windowSizeStore();
@@ -97,19 +121,21 @@ console.log("windowSize.width in Products => " + windowSize.categoriesTop);
 export default defineComponent({
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Products",
+  components: {
+    ProductCard,
+  },
 
   setup() {
     const liked = ref(false);
-    /*const state = reactive({
-      count: 0,
-    });
-    onMounted(() => {
-      ;
-    }),*/
+    const products = ref(data);
+
     function onClickLike() {
       console.log("like cliqué ");
       liked.value = !liked.value;
       // clients.allClients.find(client=>client.)
+    }
+    function clickProduct(item) {
+      console.log("Produit cliqué " + item.name);
     }
 
     function addCart(element) {
@@ -143,6 +169,9 @@ export default defineComponent({
       stars: ref(4),
       liked,
       onClickLike,
+      clickProduct,
+      products,
+      tab: ref(products.value[0].name),
       windowWidth: ref(window.innerWidth),
     };
   },

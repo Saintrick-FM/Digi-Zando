@@ -56,12 +56,6 @@ export default {
     ]);
 
     onMounted(() => {
-      /*Pass the height of the topNavBar to child components to handle onscroll banner sticky
-      localStorage.setItem(
-        "categories_top",
-        document.querySelector("#categories").offsetTop
-      );*/
-
       //let top = document.querySelector("#categories");
       windowSize.initializeSIzes({
         categoriesTop: document.querySelector("#categories").offsetTop,
