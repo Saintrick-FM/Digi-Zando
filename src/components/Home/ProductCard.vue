@@ -1,7 +1,11 @@
 <template>
-  <q-card-section style="height: 60%" class="bg-primary no-padding text-white">
-    <q-img style="height: 100%" :src="image">
+  <q-card-section
+    style="height: 130px"
+    class="bg-primary no-padding text-white"
+  >
+    <q-img height="inherit" :src="image">
       <q-btn
+        @click="clickLike"
         dense
         round
         push
@@ -15,7 +19,6 @@
         :text-color="liked ? 'green' : 'white'"
         icon="favorite"
         class="rounded-borders; shadow-10; elevation-4"
-        @click="onClickLike"
       />
       <div
         style="height: 25px; width: 100%; padding: 0 0 7px 0"
@@ -38,7 +41,7 @@
 
   <q-separator />
 
-  <q-card-section style="height: 40%" align="space-between">
+  <q-card-section style="height: 70px" align="space-between">
     <q-btn
       fab
       push
@@ -49,9 +52,9 @@
       icon="shopping_cart"
       class="absolute"
       style="
-        bottom: 0px;
-        right: 0px;
-        padding: 8.2px;
+        bottom: 3.05px;
+        right: 0.5px;
+        padding: 6px;
         border-bottom-right-radius: 0;
       "
     />
@@ -61,16 +64,18 @@
 <script>
 import axios from "axios";
 import { windowSizeStore } from "../../stores/window-size";
-import { mapGetters } from "vuex";
+//import { mapGetters } from "vuex";
 export default {
   name: "ProductCard",
   data: () => ({
-    loader: false,
-    moisToPay: [],
+    liked: false,
+    stars: 4,
+    windowWidth: null,
   }),
+  props: ["image", "statut"],
 
   computed: {
-    formTitle() {
+    /*formTitle() {
       return this.editedIndex === -1
         ? "Nouvel(le) Enseignant(e)"
         : "Modification d'un(e) enseignant(e)";
@@ -81,70 +86,35 @@ export default {
         ? "margin:0px 150px 0px 10px"
         : "margin:0px 150px 0px 5px";
     },
-    ...mapGetters(["allTeachers", "allMatieres"]),
+    ...mapGetters(["allTeachers", "allMatieres"]),*/
   },
 
   watch: {
-    allFraisPayes(newValue, oldValue) {
+    /*  allFraisPayes(newValue, oldValue) {
       newValue || oldValue;
     },
     dialogDelete(val) {
       val || this.closeDelete();
-    },
+    },*/
   },
-
+  mounted() {
+    this.windowWidth = window.innerWidth;
+    console.log(
+      "Mounted 😻 window width in ProductCard => " + this.windowWidth
+    );
+  },
   beforeMount() {
-    let mat = this.allMatieres;
-    this.initialiseProf();
+    console.log("before mount");
+    //this.initialise;
   },
 
   methods: {
-    CloseAlert() {
-      this.message_erreur = "";
-      this.erreur = false;
+    clickLike() {
+      console.log("like cliqué ");
+      this.liked = !this.liked;
     },
   },
 };
-</script>
-<script setup>
-//import { ref, defineComponent, defineProps } from "vue";
-
-const windowSize = windowSizeStore();
-console.log("windowSize.width in ProductCard => " + windowSize.categoriesTop);
-
-const props = defineProps(["image", "statut"]);
-const liked = ref(false);
-
-function onClickLike() {
-  console.log("like cliqué ");
-  liked.value = !liked.value;
-}
-
-/*
-export default defineComponent({
-  // eslint-disable-next-line vue/multi-word-component-names
-  name: "ProductCard",
-  props: defineProps(["image", "statut"]),
-
-  setup() {
-    const liked = ref(false);
-
-    function onClickLike() {
-      console.log("like cliqué ");
-      liked.value = !liked.value;
-    }
-
-    return {
-      stars: ref(4),
-      liked,
-      onClickLike,
-      props.image,
-      statut,
-      windowWidth: ref(window.innerWidth),
-    };
-  },
-});
-*/
 </script>
 
 <style></style>

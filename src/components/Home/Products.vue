@@ -10,8 +10,8 @@
       :key="product.key"
       :style="
         windowWidth > 280 && index % 2 == 0
-          ? 'margin-top:0; height:100%'
-          : 'margin-top:22px; height:100%'
+          ? 'margin-top:0; height:200px'
+          : 'margin-top:22px; height:200px'
       "
       :class="
         windowWidth > 280
@@ -19,7 +19,11 @@
           : 'col-11 shadow-2 rounded-borders'
       "
     >
-      <product-card :image="product.image" :statut="product.statut" />
+      <product-card
+        style="height: 200px"
+        :image="product.image"
+        :statut="product.statut"
+      />
       <!-- <q-card-section
         style="height: 60%"
         class="bg-primary no-padding text-white"

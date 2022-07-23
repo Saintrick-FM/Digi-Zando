@@ -85,5 +85,6 @@ export default {
   top: 40.2px;
   left: 0;
   background-color: $primary;
+  z-index: 2;
 }
 </style>
