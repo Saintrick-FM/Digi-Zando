@@ -4,26 +4,28 @@
     class="bg-primary no-padding text-white"
   >
     <q-img height="inherit" :src="image">
-      <q-btn
-        @click="clickLike"
-        dense
-        round
-        push
-        style="
-          position: absolute;
-          right: 0px;
-          top: 0.7px;
-          border-top-right-radius: 0px;
-        "
-        :color="liked ? 'primary' : 'transparent'"
-        :text-color="liked ? 'green' : 'white'"
-        icon="favorite"
-        class="rounded-borders; shadow-10; elevation-4"
-      />
       <div
         style="height: 25px; width: 100%; padding: 0 0 7px 0"
         class="absolute-bottom flex items-center text-subtitle2 text-left"
       >
+        <q-btn
+          @click="clickLike"
+          dense
+          round
+          push
+          style="
+            position: absolute;
+            right: 0px;
+            top: -105px;
+            border-top-right-radius: 0px;
+          "
+          color="transparent"
+          :text-color="
+            products.find((x) => x.key == id).liked ? 'light-green-13' : 'white'
+          "
+          icon="favorite"
+          class="round no-padding shadow-10 elevation-4"
+        />
         <q-chip
           style="padding: 0 0 0 2px"
           outline
@@ -62,9 +64,12 @@
 </template>
 
 <script>
-import axios from "axios";
-import { windowSizeStore } from "../../stores/window-size";
+//import { windowSizeStore } from "../../stores/window-size";
+import { productsStore } from "../../stores/products";
+import { mapState, mapActions } from "pinia";
+
 //import { mapGetters } from "vuex";
+//import axios from "axios";
 export default {
   name: "ProductCard",
   data: () => ({
@@ -72,7 +77,7 @@ export default {
     stars: 4,
     windowWidth: null,
   }),
-  props: ["image", "statut"],
+  props: ["image", "statut", "id"],
 
   computed: {
     /*formTitle() {
@@ -87,6 +92,7 @@ export default {
         : "margin:0px 150px 0px 5px";
     },
     ...mapGetters(["allTeachers", "allMatieres"]),*/
+    ...mapState(productsStore, ["products"]),
   },
 
   watch: {
@@ -109,9 +115,12 @@ export default {
   },
 
   methods: {
+    ...mapActions(productsStore, ["setLikedProduct"]),
     clickLike() {
-      console.log("like cliqué ");
-      this.liked = !this.liked;
+      console.log("like cliqué " + this.id);
+      this.setLikedProduct(this.id);
+
+      //this.liked = !this.liked;
     },
   },
 };

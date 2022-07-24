@@ -20,73 +20,10 @@
       "
     >
       <product-card
-        style="height: 200px"
         :image="product.image"
+        :id="product.key"
         :statut="product.statut"
       />
-      <!-- <q-card-section
-        style="height: 60%"
-        class="bg-primary no-padding text-white"
-      >
-        <q-img
-          style="height: 100%"
-          :src="product.image"
-        >
-          <q-btn
-            dense
-            round
-            push
-            style="
-              position: absolute;
-              right: 0px;
-              top: 0.7px;
-              border-top-right-radius: 0px;
-            "
-            :color="liked ? 'primary' : 'transparent'"
-            :text-color="liked ? 'green' : 'white'"
-            icon="favorite"
-            class="rounded-borders; shadow-10; elevation-4"
-            @click="onClickLike"
-          />
-          <div
-            style="height: 25px; width: 100%; padding: 0 0 7px 0"
-            class="absolute-bottom flex items-center text-subtitle2 text-left"
-          >
-            <q-chip
-              style="padding: 0 0 0 2px"
-              outline
-              dense
-              square
-              color="primary"
-              text-color="white"
-              icon="event"
-            >
-              {{product.statut}}
-            </q-chip>
-          </div>
-        </q-img>
-      </q-card-section>
-
-      <q-separator />
-
-      <q-card-section style="height: 40%" align="space-between">
-        <q-btn
-          fab
-          push
-          round
-          dense
-          elevation-4
-          color="primary"
-          icon="shopping_cart"
-          class="absolute"
-          style="
-            bottom: 0px;
-            right: 0px;
-            padding: 8.2px;
-            border-bottom-right-radius: 0;
-          "
-        />
-      </q-card-section> -->
     </q-intersection>
 
     <q-tabs
