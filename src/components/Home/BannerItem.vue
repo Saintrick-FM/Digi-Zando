@@ -2,7 +2,7 @@
 import axios from "axios";
 import { mapGetters } from "vuex";
 export default {
-  name: "Eleves",
+  name: " Banner jpm",
   data: () => ({
     loader: false,
     MyHeaders: [

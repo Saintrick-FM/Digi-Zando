@@ -1,50 +1,104 @@
 <template>
-  <div
-    style="padding-top: 40px"
-    class="row q-gutter-y-lg q-px-xs doc-container justify-evenly items-start"
-  >
-    <q-intersection
-      transition="scale"
-      transition-duration="100"
-      v-for="(product, index) in products"
-      :key="product.key"
-      :style="
-        windowWidth > 280 && index % 2 == 0
-          ? 'margin-top:0; height:200px'
-          : 'margin-top:22px; height:200px'
-      "
-      :class="
-        windowWidth > 280
-          ? 'col-5 shadow-2 rounded-borders'
-          : 'col-11 shadow-2 rounded-borders'
-      "
+  <div style="padding-top: 40px; margin-bottom: 40px" class="q-px-xs">
+    <div
+      class="row bg-transparent q-gutter-y-lg doc-container justify-evenly items-start"
     >
-      <product-card
-        :image="product.image"
-        :id="product.key"
-        :statut="product.statut"
-      />
-    </q-intersection>
-
-    <q-tabs
-      v-model="tab"
-      flat
-      sweepable
-      active-bg-color="light-green-7"
-      style="width: 100%; padding: 0 5px; height: 60px; justify-self: center"
-      class="q-mx-none text-white q-mt-sm flex-center bg-transparent shadow-10"
-    >
-      <q-tab
-        v-for="item in products"
-        :key="item.id"
-        :name="item.name"
-        @click="clickProduct(item)"
-        class="q-pa-none"
-        style="border-radius: 120px"
+      <q-intersection
+        transition="scale"
+        transition-duration="100"
+        v-for="(product, index) in products"
+        :key="product.key"
+        :style="
+          windowWidth > 280 && index % 2 == 0
+            ? 'margin-top:0; height:200px'
+            : 'margin-top:22px; height:200px'
+        "
+        :class="
+          windowWidth > 280
+            ? 'col-5 shadow-2 rounded-borders'
+            : 'col-11 shadow-2 rounded-borders'
+        "
       >
-        <product-card :image="item.image" :statut="item.statut" />
-      </q-tab>
-    </q-tabs>
+        <product-card
+          :image="product.image"
+          :id="product.key"
+          :statut="product.statut"
+        />
+      </q-intersection>
+    </div>
+    <q-chip
+      style="
+        display: flex;
+        position: relative;
+        left: 0;
+        height: 25px;
+        width: max-content;
+        margin: -12px 0 10px 15px;
+      "
+      color="black"
+      class="glossy no-border doc-container q-ml-xs"
+      text-color="white"
+    >
+      <!-- :id='item.title' -->
+      <q-avatar style="height: inherit">
+        <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
+      </q-avatar>
+      <div class="ellipsis" style="height: inherit">Autres articles</div>
+    </q-chip>
+    <q-carousel
+      swipeable
+      animated
+      transition-prev="jump-right"
+      transition-next="jump-left"
+      v-model="slide"
+      ref="carousel"
+      height="200px"
+      class="bg-transparent q-mx-auto no-border q-mb-xs shadow-2 q-pa-none"
+      style="width: 90%"
+    >
+      <q-carousel-slide
+        v-for="(product, index) in products"
+        :key="product.key"
+        style="height: 200px"
+        :class="
+          windowWidth > 280
+            ? 'col-5 no-padding shadow-2 rounded-borders'
+            : 'col-11 no-padding shadow-2 rounded-borders'
+        "
+        :name="index"
+      >
+        <product-card
+          :image="product.image"
+          :statut="product.statut"
+          :id="index"
+        />
+      </q-carousel-slide>
+
+      <template v-slot:control>
+        <q-carousel-control position="top" :offset="[0, 0]" class="q-gutter-xs">
+          <q-btn
+            push
+            round
+            dense
+            color="orange"
+            text-color="black"
+            icon="arrow_left"
+            @click="$refs.carousel.previous()"
+            v-if="slide != 1"
+          />
+          <q-btn
+            push
+            round
+            dense
+            color="orange"
+            text-color="black"
+            icon="arrow_right"
+            @click="$refs.carousel.next()"
+            v-if="slide != 4"
+          />
+        </q-carousel-control>
+      </template>
+    </q-carousel>
   </div>
 </template>
 
@@ -113,6 +167,7 @@ export default defineComponent({
       clickProduct,
       products,
       tab: ref(products.value[0].name),
+      slide: ref(1),
       windowWidth: ref(window.innerWidth),
     };
   },

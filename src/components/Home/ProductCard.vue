@@ -105,6 +105,7 @@ export default {
   },
   mounted() {
     this.windowWidth = window.innerWidth;
+    console.log("this.products " + this.products);
     console.log(
       "Mounted 😻 window width in ProductCard => " + this.windowWidth
     );

@@ -24,6 +24,7 @@
         text-color="white"
         width="50px"
       >
+        <!-- <link rel="" type="" :href="'#'+item.title"> -->
         <q-avatar>
           <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
         </q-avatar>
@@ -33,6 +34,7 @@
       </q-chip>
     </q-tab>
   </q-tabs>
+
   <!-- </div>
 
     <div class="q-mt-sm">Your pick: {{ selection }}</div> -->
